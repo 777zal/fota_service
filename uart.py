@@ -1,14 +1,11 @@
 from enum import Enum
 import serial
 import serial.tools.list_ports
-
-class Command(Enum):
-    VER     = f"ARC"
-    XMODEM  = "XMODEM"
+import edc as crc
 
 class UART:
     def __init__(self):
-        #self.serial_instance = serial.Serial()
+        self.cr = crc.EDC("ARC")
         print("Uart has Set")
 
     def get_all_uart_list(self):
@@ -33,11 +30,13 @@ class UART:
         print(length)
         packet += (length.to_bytes(2,'big'))
         packet += data
+        crc16 = self.cr.calculate(packet, length+4)
+        print(crc16)
+        packet += (crc16.to_bytes(2,'big'))
         packet += (bytes(';','utf-8'))
         return packet
 
     def transmit_message(self, data:bytearray):
-        # packet = f"10001"
         self.serial_instance.write(data)
 
 

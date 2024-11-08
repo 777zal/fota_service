@@ -10,7 +10,6 @@ from timeit import default_timer
 import threading
 from inputimeout import inputimeout, TimeoutOccurred
 import filing as fl
-import edc as crc
 import uart as ua
 
 uart1   = ua.UART()
